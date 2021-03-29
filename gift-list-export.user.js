@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         amazon-baby-registry-gift-list-export
-// @namespace    http://amazon.com/baby-reg/thankyoulist*
+// @namespace    https://mrdave.dev
 // @version      1.0
 // @description  Combines listings in the Amazon baby registry thank you list in to a single CSV document and downloads
 // @author       Dave Martinez, https://mrdave.dev
