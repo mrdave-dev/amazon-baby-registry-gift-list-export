@@ -89,7 +89,7 @@
           return resolve(row)
         })
 
-        request.open('POST', 'https://www.amazon.com/baby-reg/thankyoulist/detail')
+        request.open('POST', 'https://www.amazon.com/baby-reg/thankyoulist/detail?sif_profile=BabyRegistryThankYouList_NA')
         request.setRequestHeader('accept', 'text/html,*/*')
         request.setRequestHeader('content-type', 'application/x-www-form-urlencoded')
         request.setRequestHeader('downlink', '10')
