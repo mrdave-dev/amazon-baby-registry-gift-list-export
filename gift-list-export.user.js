@@ -1,7 +1,9 @@
 // ==UserScript==
 // @name         amazon-baby-registry-gift-list-export
 // @namespace    https://mrdave.dev
-// @version      1.0
+// @updateURL    https://github.com/mrdave-dev/amazon-baby-registry-gift-list-export/raw/main/gift-list-export.user.js
+// @downloadURL  https://github.com/mrdave-dev/amazon-baby-registry-gift-list-export/raw/main/gift-list-export.user.js
+// @version      1.0.1
 // @description  Combines listings in the Amazon baby registry thank you list in to a single CSV document and downloads
 // @author       Dave Martinez, https://mrdave.dev
 // @match        https://www.amazon.com/baby-reg/thankyoulist*
@@ -66,21 +68,22 @@
         formData.append('token', token)
 
         const request = new XMLHttpRequest()
-        request.addEventListener('load', (event) => {
-          const addressDataMatcher = /([A-Z0-9][A-Z0-9\- ]+),?\n?/gm
+        request.addEventListener('load', (_event) => {
           // The request returns HTML, so we add it to a virtual element
           const element = document.createElement('div')
           element.innerHTML = request.response
           // The address is stored in the second ([1]) result
-          const addressElement = Array.from(element.querySelectorAll('.br-tyl-details-wrapper .a-section'))[1]
-          const address = addressElement.innerHTML.toString().match(addressDataMatcher)
 
-          if (!address) {
+          // START HERE -- Remove the words 'purchase address' from the element
+          // instead of trying to parse the address
+          const addressElement = Array.from(element.querySelectorAll('.br-tyl-details-wrapper .a-section'))[1]
+          const cleanAddress = addressElement.innerText.split(/\n?\s\s+?/g).filter(y => y.length > 0).join(' ')
+
+          if (!cleanAddress) {
             // This is okay; some people choose not to include their address
             console.warn('Could not find address elements', gift)
           }
 
-          const cleanAddress = address && address.join(' ').replaceAll('\n', '')
           const row = [gift.giftGiverName, gift.displayableGiftDate, gift.productTitle, cleanAddress]
             // Wrap the data in quotes for the CSV export, since product titles and addresses
             // may contain a comma
