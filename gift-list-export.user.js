@@ -13,6 +13,12 @@
 (function () {
   'use strict'
 
+  // Update these based on your registry before running the script
+  const REGISTRY_ID = '2MSXVAPN0SUAA';
+  const PRIMARY_OWNER_CUSTOMER_ID = 'A45579H563N1Z';
+  const REGISTRY_SHIPPING_ADDRESS_ID = 'A3R5EH9ZY1D1OZ';
+  const OUTPUT_DELIMITER = ',';
+
   // Adds export button
   const exportButton = document.createElement('button')
   exportButton.className = 'a-button a-button-base'
@@ -63,12 +69,12 @@
 
 
         const params = new URLSearchParams();
-        params.set('registryId', '2MSXVAPN0SUAA');
+        params.set('registryId', REGISTRY_ID);
         params.set('giftIndex', '0');
         params.set('isPrimaryRegistrant', 'true');
-        params.set('primaryOwnerCustomerId', 'A45579H563N1Z');
+        params.set('primaryOwnerCustomerId', PRIMARY_OWNER_CUSTOMER_ID);
         params.set('gift', JSON.stringify(giftRequest.gift));
-        params.set('registryShippingAddressId', 'A3R5EH9ZY1D1OZ');
+        params.set('registryShippingAddressId', REGISTRY_SHIPPING_ADDRESS_ID);
         params.set('token', token);
         
         const request = new XMLHttpRequest();
@@ -96,7 +102,7 @@
         
         // Set headers (must be after `open`)
         request.withCredentials = true
-        request.setRequestHeader('Referrer', 'https://www.amazon.com/baby-reg/thankyoulist/2MSXVAPN0SUAA?ref_=br_dsk_tbnr_ty');
+        request.setRequestHeader('Referrer', 'https://www.amazon.com/baby-reg/thankyoulist/'+REGISTRY_ID+'?ref_=br_dsk_tbnr_ty');
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         request.setRequestHeader('Accept', 'text/html,*/*');
         request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -107,9 +113,17 @@
 
     const allResults = await Promise.all(itemQueryResults)
 
+    // for csv output, we need to enclose all columns in quotes due to multiple
+    // columns containing commas, which is our csv separator.
+    // additionally, we need to replace all interior single quotes to comply
+    // with csv standard and so that it does not break when opening in excel.
+    // this happens often because many items the double quote character, "
+    // to represent inches e.g. 12" = 1 ft
+    const wrappedResults = allResults.map(rowDataList => rowDataList.map(d => `"${d.replaceAll('"','""')}"`));
+
     const headerRows = ['Gift giver name', 'Date', 'Product', 'Address']
-    const csvContent = `${headerRows.join(',')}\n` +
-                allResults.map(rowDataList => rowDataList.join(',')).join('\n')
+    const csvContent = `${headerRows.join(OUTPUT_DELIMITER)}\n` +
+                wrappedResults.map(rowDataList => rowDataList.join(OUTPUT_DELIMITER)).join('\n')
 
     const link = document.createElement('a')
     const csvData = new Blob([csvContent], { type: 'text/csv' })
