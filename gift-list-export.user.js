@@ -17,6 +17,7 @@
   const REGISTRY_ID = '2MSXVAPN0SUAA';
   const PRIMARY_OWNER_CUSTOMER_ID = 'A45579H563N1Z';
   const REGISTRY_SHIPPING_ADDRESS_ID = 'A3R5EH9ZY1D1OZ';
+  const OUTPUT_DELIMITER = ',';
 
   // Adds export button
   const exportButton = document.createElement('button')
@@ -121,8 +122,8 @@
     const wrappedResults = allResults.map(rowDataList => rowDataList.map(d => `"${d.replaceAll('"','""')}"`));
 
     const headerRows = ['Gift giver name', 'Date', 'Product', 'Address']
-    const csvContent = `${headerRows.join(',')}\n` +
-                wrappedResults.map(rowDataList => rowDataList.join(',')).join('\n')
+    const csvContent = `${headerRows.join(OUTPUT_DELIMITER)}\n` +
+                wrappedResults.map(rowDataList => rowDataList.join(OUTPUT_DELIMITER)).join('\n')
 
     const link = document.createElement('a')
     const csvData = new Blob([csvContent], { type: 'text/csv' })
