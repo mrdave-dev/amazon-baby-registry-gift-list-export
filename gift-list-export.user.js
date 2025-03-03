@@ -86,7 +86,7 @@
             .filter((y) => y.length > 0)
             .join(' ');
         
-          const row = [gift.giftGiverName, gift.displayableGiftDate, gift.productTitle, cleanAddress];
+          const row = [gift.giftGiverName, gift.giftDateString, gift.productTitle, cleanAddress];
           resolve(row);
         });
         
