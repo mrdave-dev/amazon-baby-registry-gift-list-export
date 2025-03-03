@@ -112,9 +112,17 @@
 
     const allResults = await Promise.all(itemQueryResults)
 
+    // for csv output, we need to enclose all columns in quotes due to multiple
+    // columns containing commas, which is our csv separator.
+    // additionally, we need to replace all interior single quotes to comply
+    // with csv standard and so that it does not break when opening in excel.
+    // this happens often because many items the double quote character, "
+    // to represent inches e.g. 12" = 1 ft
+    const wrappedResults = allResults.map(rowDataList => rowDataList.map(d => `"${d.replaceAll('"','""')}"`));
+
     const headerRows = ['Gift giver name', 'Date', 'Product', 'Address']
     const csvContent = `${headerRows.join(',')}\n` +
-                allResults.map(rowDataList => rowDataList.join(',')).join('\n')
+                wrappedResults.map(rowDataList => rowDataList.join(',')).join('\n')
 
     const link = document.createElement('a')
     const csvData = new Blob([csvContent], { type: 'text/csv' })
