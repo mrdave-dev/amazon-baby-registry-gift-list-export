@@ -80,7 +80,8 @@
           element.innerHTML = request.response;
 
           const addressElement = Array.from(element.querySelectorAll('.br-tyl-item-details-address.a-section'))[0];
-          const cleanAddress = element.querySelector('#br-tyl-gifter-address-0')
+          // There is an error caused if no address is given by one of the gifters
+          const cleanAddress = element.innerText.includes("No Address Given") ? "No Address Given" : element.querySelector('#br-tyl-gifter-address-0')
             .innerText
             .split(/\n?\s\s+?/g)
             .filter((y) => y.length > 0)
