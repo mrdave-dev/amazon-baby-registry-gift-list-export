@@ -69,6 +69,7 @@
         params.set('primaryOwnerCustomerId', 'A45579H563N1Z');
         params.set('gift', JSON.stringify(giftRequest.gift));
         params.set('registryShippingAddressId', 'A3R5EH9ZY1D1OZ');
+        params.set('token', token);
         
         const request = new XMLHttpRequest();
         
