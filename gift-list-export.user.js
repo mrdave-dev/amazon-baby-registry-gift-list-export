@@ -69,6 +69,7 @@
         params.set('primaryOwnerCustomerId', 'A45579H563N1Z');
         params.set('gift', JSON.stringify(giftRequest.gift));
         params.set('registryShippingAddressId', 'A3R5EH9ZY1D1OZ');
+        params.set('token', token);
         
         const request = new XMLHttpRequest();
         
@@ -77,15 +78,15 @@
           
           const element = document.createElement('div');
           element.innerHTML = request.response;
-        
-          const addressElement = Array.from(element.querySelectorAll('#br-tyl-details-wrapper.a-section'))[0];
+
+          const addressElement = Array.from(element.querySelectorAll('.br-tyl-item-details-address.a-section'))[0];
           const cleanAddress = element.querySelector('#br-tyl-gifter-address-0')
             .innerText
             .split(/\n?\s\s+?/g)
             .filter((y) => y.length > 0)
             .join(' ');
         
-          const row = [gift.giftGiverName, gift.displayableGiftDate, gift.productTitle, cleanAddress];
+          const row = [gift.giftGiverName, gift.giftDateString, gift.productTitle, cleanAddress];
           resolve(row);
         });
         
