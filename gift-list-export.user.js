@@ -78,8 +78,8 @@
           
           const element = document.createElement('div');
           element.innerHTML = request.response;
-        
-          const addressElement = Array.from(element.querySelectorAll('#br-tyl-details-wrapper.a-section'))[0];
+
+          const addressElement = Array.from(element.querySelectorAll('.br-tyl-item-details-address.a-section'))[0];
           const cleanAddress = element.querySelector('#br-tyl-gifter-address-0')
             .innerText
             .split(/\n?\s\s+?/g)
